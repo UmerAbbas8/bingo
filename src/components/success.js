@@ -3,6 +3,7 @@ import 'antd/dist/antd.min.css';
 import { Modal, Button } from 'antd';
 import { useGameContext } from '../game/GameContext';
 import { getRandomNumber } from '../helpers/utility';
+import { announceMsg } from '../helpers/utility';
 
 const giftsArr = [
   "A Trip to Outer Space!, I know how excited you are! ;)",
@@ -33,6 +34,10 @@ const Success = ({ startGame, continuePlaying }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game.winnerNames])
+
+  useEffect(() => {
+    announceMsg(successMessage);
+  }, [successMessage])
 
   const handlePlayAgain = () => {
     setIsModalVisible(false);

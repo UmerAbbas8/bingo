@@ -7,6 +7,7 @@ import Success from "../components/success";
 import Settings from "../components/settings";
 import BingoCard from "../components/card";
 import { getBingoCardNumbers } from '../helpers/utility';
+import { announceMsg } from '../helpers/utility';
 
 const Game = () => {
   const gameSettings = useGameContext();
@@ -63,6 +64,7 @@ const Game = () => {
     setCallNumbers(arr);
     if (number) {
       setCurrentNumber(number);
+      announceMsg(number);
     }
   }
 

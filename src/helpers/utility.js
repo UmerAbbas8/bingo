@@ -70,3 +70,20 @@ export const checkIsWon = (arr, bingoCount = 1) => {
 export const getRandomNumber = (min, max) => { // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
+
+export const announceMsg = (str) => {
+  var msg = new SpeechSynthesisUtterance();
+  var voices = window.speechSynthesis.getVoices();
+  msg.voice = voices[10]; // Note: some voices don't support altering params
+  msg.voiceURI = 'native';
+  msg.volume = 1; // 0 to 1
+  msg.rate = 0.8; // 0.1 to 10
+  msg.pitch = 1.15; // 0 to 2
+  msg.text = '' + str;
+  msg.lang = 'en-US';
+
+  msg.onerror = (e) => {
+    console.error('Error: ', e);
+  };
+  speechSynthesis.speak(msg);
+} 

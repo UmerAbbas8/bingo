@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.min.css';
 import { Modal, Button } from 'antd';
+import { announceMsg } from '../helpers/utility'
 
 const Welcome = ({ startGame }) => {
   const [isModalVisible, setIsModalVisible] = useState(true);
+
+  useEffect(() => {
+    if (isModalVisible) {
+      setTimeout(() => { announceMsg('Welcome to Bingo Friday!!') }, 1000);
+    }
+  }, [isModalVisible]);
 
   const handlePlay = () => {
     setIsModalVisible(false);
