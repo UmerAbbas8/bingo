@@ -63,8 +63,16 @@ const Success = ({ startGame, continuePlaying }) => {
       </p>
       <br />
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button aria-label='handlePlayAgain' onClick={handlePlayAgain}>Let's Play Again?</Button>
-        <Button aria-label='handleContinuePlaying' onClick={handleContinuePlaying}>Continue Playing</Button>
+        <Button 
+          className="play-again-btn"
+          aria-label='handlePlayAgain' 
+          onClick={handlePlayAgain}>Let's Play Again?
+        </Button>
+        <Button 
+          className="continue-playing-btn"
+          aria-label='handleContinuePlaying' 
+          onClick={handleContinuePlaying}>Continue Playing
+        </Button>
       </div>
     </Modal>
   );
