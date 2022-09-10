@@ -1,12 +1,17 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Row } from 'antd';
+import { useGameContext, useGameContextUpdate } from './GameContext';
 import Welcome from "../components/welcome";
+import Success from "../components/success";
+import Settings from "../components/settings";
 import BingoCard from "../components/card";
 import { getBingoCardNumbers } from '../helpers/utility';
 
 const Game = () => {
-  const players = Array(2).fill(0);
+  const gameSettings = useGameContext();
+  const { settings } = gameSettings;
+  const players = Array(settings.noOfPlayers).fill(0);
   const [bingoCardNumbers, setBingoCardNumbers] = useState([]);
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -19,7 +24,7 @@ const Game = () => {
     setIsFirstNumberCalled(false);
     setIsFinished(false);
     setIsStarted(true);
-    const numbers = getBingoCardNumbers(1, 50)
+    const numbers = getBingoCardNumbers(settings.numberRange[0], settings.numberRange[1])
     setBingoCardNumbers(numbers);
     setCallNumbers([...numbers]);
   }
@@ -27,7 +32,21 @@ const Game = () => {
   useEffect(() => {
     startGame();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [settings.noOfPlayers])
+
+  const continuePlaying = () => {
+    setIsFinished(false);
+    if (bingoTarget + 1 <= 5) {
+      setBingoTarget(bingoTarget + 1);
+    }
+    callNumber();
+  }
+
+  const gameFinished = () => {
+    setIsFinished(true);
+    setCallNumbers([]);
+    setIsStarted(false);
+  }
 
   useEffect(() => {
     if (!isFirstNumberCalled && callNumbers.length > 0 && !isFinished) {
@@ -47,11 +66,11 @@ const Game = () => {
     }
   }
 
-  console.log('11111')
-
   return (
     <>
+      <Settings startGame={startGame} />
       <Welcome startGame={startGame} isFinished={isFinished} isStarted={isStarted} />
+      <Success startGame={startGame} continuePlaying={continuePlaying} isStarted={isStarted} />
       <Row>
         {players.map((_, key) => (
           <BingoCard
@@ -63,6 +82,7 @@ const Game = () => {
             bingoCardNumbers={bingoCardNumbers}
             playerName={key === 0 ? 'You' : `Bot ${key}`}
             isBot={key !== 0}
+            gameFinished={gameFinished}
           />
         ))}
       </Row>

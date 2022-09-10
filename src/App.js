@@ -1,13 +1,14 @@
-import './App.css';
+import React from 'react';
 import AppLayout from './layouts';
+import { GameProvider } from './game/GameContext';
 import Game from './game/Game';
 
-function App() {
-  return (
-    <AppLayout className='mainLayout'>
+const App = () => (
+  <GameProvider>
+    <AppLayout className='mainLayout' >
       <Game />
     </AppLayout>
-  );
-}
+  </GameProvider>
+);
 
 export default App;
