@@ -2,6 +2,7 @@ import "antd/dist/antd.min.css";
 import '../App.css';
 import { Layout, Button } from 'antd';
 import { SettingOutlined } from "@ant-design/icons";
+import { useGameContext, useGameContextUpdate } from '../game/GameContext';
 
 const styles = {
   container: {
@@ -12,6 +13,15 @@ const styles = {
 
 const { Header } = Layout;
 const AppHeader = () => {
+  const gameSettings = useGameContext();
+  const updateGameSettings = useGameContextUpdate();
+
+  const openSettings = () => {
+    updateGameSettings({
+      ...gameSettings,
+      visible: true,
+    });
+  }
 
   return (
     <Header>
@@ -20,7 +30,7 @@ const AppHeader = () => {
           <p className="logo">Bingo Friday!</p>
         </div>
         <div>
-          <Button aria-label='settings'><SettingOutlined /></Button>
+          <Button aria-label='settings' onClick={openSettings}><SettingOutlined /></Button>
         </div>
       </div>
     </Header>

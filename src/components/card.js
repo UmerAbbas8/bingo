@@ -1,7 +1,8 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Col, Card } from 'antd';
-import { shuffleNumbers } from '../helpers/utility';
+import { shuffleNumbers, getCard2DArray, checkIsWon } from '../helpers/utility';
+import { useGameContext, useGameContextUpdate } from '../game/GameContext';
+import { WAIT_TIME } from '../config'
 
 const colLayout = {
   xs: 24,
@@ -28,14 +29,26 @@ const colorPallet = [
 ];
 
 const BingoCard = (props) => {
+  const gameSettings = useGameContext();
+  const updateGameSettings = useGameContextUpdate();
 
   const {
     bingoCardNumbers,
     currentNumber,
+    bingoTarget,
+    callNumber,
     playerName,
+    isBot,
+    isFinished,
   } = props;
   const [cardArr, setCardArr] = useState([]);
   const [isWon, setIsWon] = useState(false);
+  const [hint, setHint] = useState(false);
+
+  useEffect(() => {
+    setIsWon(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bingoTarget])
 
   useEffect(() => {
     setIsWon(false)
@@ -60,6 +73,45 @@ const BingoCard = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bingoCardNumbers]);
 
+  const checkNumber = (num) => {
+    let arr = [...cardArr];
+    for (let i = 0; i < cardArr.length; i++) {
+      if (arr[i].value === num && !isFinished) {
+        arr[i].isChecked = 1;
+        break;
+      }
+    }
+    let isModalOpen = false;
+    setCardArr(arr);
+    if (checkIsWon(getCard2DArray(arr), bingoTarget)) {
+      setIsWon(true);
+      if (gameSettings && !gameSettings.winnerNames.includes(playerName)) {
+        updateGameSettings({
+          ...gameSettings,
+          winnerNames: [...gameSettings.winnerNames, playerName],
+        });
+      } else {
+        updateGameSettings({
+          ...gameSettings,
+        });
+      }
+      isModalOpen = true;
+    }
+    if (!isBot && !isModalOpen) {
+      setTimeout(callNumber, WAIT_TIME)
+    }
+  }
+
+  useEffect(() => {
+    if (currentNumber) {
+      if (isBot) {
+        checkNumber(currentNumber)
+      }
+      setHint(!hint);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentNumber])
+
   return (
     <Col {...colLayout}>
       <Card title={<strong>{playerName}</strong>} className={isWon ? 'won' : ''}>
@@ -68,7 +120,12 @@ const BingoCard = (props) => {
             <div
               data-hint={!item.isChecked && item.value === currentNumber ? 'yes' : 'no'}
               key={item.key}
-              className="tile"
+              className={`tile ${item.isChecked ? 'tile-checked' : ''} ${!isBot && !item.isChecked && item.value === currentNumber ? 'hint' : 'tile-disabled'}`}
+              onClick={() => {
+                if (!isBot && !item.isChecked && item.value === currentNumber) {
+                  checkNumber(item.value)
+                }
+              }}
             >
               {item.value}
             </div>
