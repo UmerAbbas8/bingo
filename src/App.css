@@ -51,3 +51,66 @@
 .content {
   padding: 0px;
 }
+
+.col {
+  background: #0092ff;
+  padding: 8px;
+  margin: 15px;
+}
+
+.wrapper {
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: repeat(5, auto);
+  width: 85%;
+}
+
+.tile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 2px;
+  min-height: 25px;
+  font-weight: bold;
+  font-size: 23px;
+
+  border: 4px rgb(235, 231, 231) solid;
+  border-radius: 50%;
+
+  cursor: pointer;
+}
+
+.hint {
+  color: #fff;
+  background: rgb(245, 153, 73);
+}
+
+.hint:hover {
+  background: rgb(240, 182, 131);
+}
+
+.tile-checked {
+  color: #fff;
+  background: rgb(93, 140, 93);
+}
+
+.won {
+  background: rgb(218, 196, 247);
+}
+
+.ant-card-body {
+  padding-bottom: 0px;
+}
+
+.tile-disabled {
+  cursor: not-allowed;
+  pointer-events: all !important;
+}
+
+.ant-card-body {
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
