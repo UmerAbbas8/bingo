@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Card } from 'antd';
+import { Col, Card, Tooltip } from 'antd';
 import { shuffleNumbers, getCard2DArray, checkIsWon } from '../helpers/utility';
 import { useGameContext, useGameContextUpdate } from '../game/GameContext';
 import { WAIT_TIME } from '../config'
@@ -15,17 +15,61 @@ const colLayout = {
   }
 };
 
-const colorPallet = [
-  '#3eb3ff',
-  '#3e7cfe',
-  '#3f45ff',
-  '#6f3fff',
-  '#a63fff',
-  '#826bb0',
-  '#f37b70',
-  '#8f177c',
-  '#03a9ad',
-  '#72bf44',
+const songGenres = [
+  'dubstep',
+  'Folk',
+  'Hip Hop',
+  'Rock',
+  'Instrumental',
+  'Disco',
+  'Qawali',
+  'EDM',
+  'Folk Rock',
+  'Funk',
+  'Heavy Metal',
+  'House Music',
+  'Classical',
+  'Jazz',
+  'Sufi',
+  'Pop',
+  'Nasheed',
+  'punk',
+  'rap',
+  'Rock & Roll',
+  'Romantic',
+  'Soul',
+  'Western',
+  'Latin',
+  'Arabian',
+];
+
+const colors = [
+  'pink',
+  'red',
+  'yellow',
+  'orange',
+  'cyan',
+  'green',
+  'blue',
+  'purple',
+  'geekblue',
+  'magenta',
+  'volcano',
+  'gold',
+  'lime',
+  'pink',
+  'red',
+  'yellow',
+  'orange',
+  'cyan',
+  'green',
+  'blue',
+  'purple',
+  'geekblue',
+  'magenta',
+  'volcano',
+  'gold',
+  'lime',
 ];
 
 const BingoCard = (props) => {
@@ -61,12 +105,16 @@ const BingoCard = (props) => {
           key: idx,
           value: numbers[i],
           isChecked: 0,
+          music: songGenres[i],
+          color: colors[i],
         }
       }
       arr[12] = {
         key: 12,
         value: 0,
         isChecked: 1,
+        music: songGenres[12],
+        color: colors[12]
       }
       setCardArr(arr);
     }
@@ -117,18 +165,20 @@ const BingoCard = (props) => {
       <Card title={<strong>{playerName}</strong>} className={isWon ? 'won' : ''}>
         <div className={`wrapper`}>
           {cardArr.map(item => (
-            <div
-              data-hint={!item.isChecked && item.value === currentNumber ? 'yes' : 'no'}
-              key={item.key}
-              className={`tile ${item.isChecked ? 'tile-checked' : ''} ${!isBot && !item.isChecked && item.value === currentNumber ? 'hint' : 'tile-disabled'}`}
-              onClick={() => {
-                if (!isBot && !item.isChecked && item.value === currentNumber) {
-                  checkNumber(item.value)
-                }
-              }}
-            >
-              {item.value}
-            </div>
+            <Tooltip title={item.music} color={item.color} key={`item.color-${item.key}`}>
+              <div
+                data-hint={!item.isChecked && item.value === currentNumber ? 'yes' : 'no'}
+                key={item.key}
+                className={`tile ${item.isChecked ? 'tile-checked' : ''} ${!isBot && !item.isChecked && item.value === currentNumber ? 'hint' : 'tile-disabled'}`}
+                onClick={() => {
+                  if (!isBot && !item.isChecked && item.value === currentNumber) {
+                    checkNumber(item.value)
+                  }
+                }}
+              >
+                {item.value}
+              </div>
+            </Tooltip>
           ))}
           <br />
         </div>
